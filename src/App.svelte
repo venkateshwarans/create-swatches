@@ -1,26 +1,10 @@
 <script>
-  import { onMount } from "svelte";
-  import swatches from "./palette";
-  import _ from "lodash";
-
+	import { onMount } from "svelte";
+	import Image from './Image.svelte';
+	import Color from './Color.svelte';
+	import getPattern from './generatePattern.js';
+	let imageDir = './screenshots/BTSONKineticManifestoFilm'
   export let name;
-
-  onMount(async () => {
-    consolePattern();
-  });
-
-  function consolePattern() {
-    const getPattern = _.map(swatches, obj => {
-      const colors = [];
-      for (var swatch in obj.swatch) {
-        colors.push({
-          [swatch]: Vibrant.Util.rgbToHex(...obj.swatch[swatch].rgb)
-        });
-      }
-      return { image: obj.file, colors };
-    });
-    console.log(getPattern);
-  }
 </script>
 
 <style>
@@ -36,7 +20,7 @@
     text-transform: uppercase;
     font-size: 4em;
     font-weight: 100;
-  }
+	}
 
   @media (min-width: 640px) {
     main {
@@ -46,10 +30,8 @@
 </style>
 
 <main>
-  <h1>Hello {name}!</h1>
-  <p>
-    Visit the
-    <a href="https://svelte.dev/tutorial">Svelte tutorial</a>
-    to learn how to build Svelte apps.
-  </p>
+	{#each getPattern as pattern}
+		<Image src={imageDir}/{pattern.image}></Image>
+		<Color patternColors={pattern.colors}></Color>
+	{/each}
 </main>
