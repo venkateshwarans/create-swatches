@@ -18,7 +18,7 @@
 
 <ul>
   {#each patternColors as swatch}
-  <li style='background-color: {swatch[_.keys(swatch)]}'>
+  <li style="background-color: {swatch[_.keys(swatch)]}">
   </li>
   {/each}
 </ul>

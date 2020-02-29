@@ -4,7 +4,23 @@
 	import Color from './Color.svelte';
 	import getPattern from './generatePattern.js';
 	let imageDir = './screenshots/BTSONKineticManifestoFilm'
-  export let name;
+	export let name;
+
+
+import FastAverageColor from 'fast-average-color';
+const fac = new FastAverageColor();
+
+
+	setTimeout(callFac, 4000);
+
+function callFac() {
+  fac.getColorAsync('./screenshots/BTSONKineticManifestoFilm/BTSONKineticManifestoFilm (1).png')
+  .then(function(color) {
+    console.log('Average color', color);
+  }).catch(function(e) {
+    console.log(e);
+  });
+}
 </script>
 
 <style>
