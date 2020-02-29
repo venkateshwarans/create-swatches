@@ -18,6 +18,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "lodash": "^4.17.15",
     "node-vibrant": "^3.1.5",
     "sirv-cli": "^0.4.4"
   }
