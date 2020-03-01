@@ -3,22 +3,33 @@ import _ from "lodash";
 import { forkJoin } from "rxjs";
 let imageDir = './screenshots/BTSONKineticManifestoFilm'
 
-let getPattern = []
-function consolePattern() {
-  getPattern = _.map(swatches, obj => {
+
+  const getPattern = _.map(swatches, async (obj) => {
     const colors = [];
+    let avg;
+    const averageColor = getAverageColor(`${imageDir}/${obj.file}`);
+
     for (var swatch in obj.swatch) {
       colors.push({
         [swatch]: Vibrant.Util.rgbToHex(...obj.swatch[swatch].rgb)
       });
     }
-    return {
+    let res = {
       image: obj.file,
-      colors
-    };
+      colors: colors,
+    }
+    averageColor.then(c => {
+      res['averageColor'] =  c
+    })
+    return res;
   });
+
+
+ async function getAverageColor(file) {
+  let dataURL  = await getImageElement(file);
+  return await dataURL
 }
-consolePattern();
+
 
 async function getImageElement(url) {
   var image = new Image();
@@ -31,16 +42,8 @@ async function getImageElement(url) {
         var context = canvas.getContext("2d");
         context.drawImage(image, 0, 0);
     };
-   return await image
+   return await getAverageRGB(image)
 }
-
-const dataURL =  getImageElement('http://localhost:57173/screenshots/BTSONKineticManifestoFilm/BTSONKineticManifestoFilm%20(1).png')
-
-dataURL.then(res => {
-  return  getAverageRGB(res)
-}).then(rgb => {
-  console.log(rgb);
-} )
 
 async function getAverageRGB(imgEl) {
 
@@ -67,7 +70,8 @@ async function getAverageRGB(imgEl) {
     try {
         data = context.getImageData(0, 0, width, height);
     } catch(e) {
-        /* security error, img on diff domain */alert('x');
+        /* security error, img on diff domain */
+        // alert('x');
         return defaultRGB;
     }
 
@@ -89,5 +93,5 @@ async function getAverageRGB(imgEl) {
 
 }
 
-export default getPattern;
 
+export default getPattern;

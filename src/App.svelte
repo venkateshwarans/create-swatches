@@ -1,26 +1,10 @@
 <script>
 	import { onMount } from "svelte";
+	import _ from "lodash";
 	import Image from './Image.svelte';
 	import Color from './Color.svelte';
 	import getPattern from './generatePattern.js';
 	let imageDir = './screenshots/BTSONKineticManifestoFilm'
-	export let name;
-
-
-import FastAverageColor from 'fast-average-color';
-const fac = new FastAverageColor();
-
-
-	setTimeout(callFac, 4000);
-
-function callFac() {
-  fac.getColorAsync('./screenshots/BTSONKineticManifestoFilm/BTSONKineticManifestoFilm (1).png')
-  .then(function(color) {
-    console.log('Average color', color);
-  }).catch(function(e) {
-    console.log(e);
-  });
-}
 </script>
 
 <style>
@@ -47,7 +31,10 @@ function callFac() {
 
 <main>
 	{#each getPattern as pattern}
-		<Image src={imageDir}/{pattern.image}></Image>
-		<Color patternColors={pattern.colors}></Color>
+		{#await pattern then value}
+		<Image src={imageDir}/{value.image}></Image>
+		<Color patternColors={value.colors}></Color>
+		{value.averageColor}
+	{/await}
 	{/each}
 </main>
